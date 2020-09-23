@@ -1,12 +1,19 @@
 package com.example.mitswallpaper;
 
+import android.app.WallpaperManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
+
+import java.io.IOException;
 
 public class fullScreenWallpaper extends AppCompatActivity {
 String originalUrl="";
@@ -21,5 +28,16 @@ PhotoView photoView;
         originalUrl = intent.getStringExtra("originalUrl");
         photoView = findViewById(R.id.photoView);
         Glide.with(this).load(originalUrl).into(photoView);
+    }
+
+    public void SetWallpaperEvent(View view) {
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        Bitmap bitmap =((BitmapDrawable)photoView.getDrawable()).getBitmap();
+            try {
+            wallpaperManager.setBitmap(bitmap);
+                Toast.makeText(this, "WAllpaper Set", Toast.LENGTH_SHORT).show();
+             }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
