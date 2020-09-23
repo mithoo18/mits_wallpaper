@@ -1,9 +1,12 @@
 package com.example.mitswallpaper;
 
+import android.app.DownloadManager;
 import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -39,5 +42,15 @@ PhotoView photoView;
              }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void DownloadWallpaperEvent(View view) {
+        DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(originalUrl);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION);
+        downloadManager.enqueue(request);
+        Toast.makeText(this, "Downloading.....", Toast.LENGTH_SHORT).show();
+
     }
 }
