@@ -48,7 +48,7 @@ PhotoView photoView;
         DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(originalUrl);
         DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         downloadManager.enqueue(request);
         Toast.makeText(this, "Downloading.....", Toast.LENGTH_SHORT).show();
 

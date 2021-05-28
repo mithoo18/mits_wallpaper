@@ -6,6 +6,15 @@ public class wallpaperModel {
     //medium thum
     //high large screen
 
+    public wallpaperModel() {
+    }
+
+    public wallpaperModel(int id, String originalUrl, String mediumUrl) {
+        this.id = id;
+        this.originalUrl = originalUrl;
+        this.mediumUrl = mediumUrl;
+    }
+
     public int getId() {
         return id;
     }
@@ -28,12 +37,5 @@ public class wallpaperModel {
 
     public void setMediumUrl(String mediumUrl) {
         this.mediumUrl = mediumUrl;
-    }
-
-    public wallpaperModel(int id, String originalUrl, String mediumUrl) {
-        this.id = id;
-        this.originalUrl = originalUrl;
-        this.mediumUrl = mediumUrl;
-
     }
 }

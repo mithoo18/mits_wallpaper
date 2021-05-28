@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     //scrolling
     Boolean isScrolling = false;
-    int currentItem,totalItem,scrollOutItems;
+    int currentItems,totalItems,scrollOutItems;
     String url = "https://api.pexels.com/v1/curated/?page="+pageNumber+"&per_page=80";
 
 
@@ -53,75 +53,101 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         wallpaperModelList = new ArrayList<>();
         wallpaperAdapter = new wallpaperAdapter(this,wallpaperModelList);
+
         recyclerView.setAdapter(wallpaperAdapter);
-        final GridLayoutManager gridLayoutManager= new GridLayoutManager(this,2);
+
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(gridLayoutManager);
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                //when start then it become true
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isScrolling = true;
+
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isScrolling= true;
                 }
+
             }
+
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                currentItem = gridLayoutManager.getChildCount();
-                totalItem = gridLayoutManager.getItemCount();
-                scrollOutItems =gridLayoutManager.findFirstVisibleItemPosition();
-                //we have scrolled 1 page know next page
-                if (isScrolling &&(currentItem + scrollOutItems == totalItem))
-                {
+                currentItems = gridLayoutManager.getChildCount();
+                totalItems = gridLayoutManager.getItemCount();
+                scrollOutItems = gridLayoutManager.findFirstVisibleItemPosition();
+
+                if(isScrolling && (currentItems+scrollOutItems==totalItems)){
                     isScrolling = false;
                     fetchWallpaper();
                 }
+
+
             }
         });
 
+
         fetchWallpaper();
+
     }
 
-    public void fetchWallpaper()
-    {
-        StringRequest request = new StringRequest(Request.Method.GET,url,
-                new Response.Listener<String>(){
+    public void fetchWallpaper(){
+
+        StringRequest request = new StringRequest(Request.Method.GET,url ,
+                new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try{
                             JSONObject jsonObject = new JSONObject(response);
-                            JSONArray jsonArray = jsonObject.getJSONArray("photos");
+
+                            JSONArray jsonArray= jsonObject.getJSONArray("photos");
+
                             int length = jsonArray.length();
-                            for(int i=0;i<length;i++)
-                            {
-                                JSONObject jsonObject1=jsonArray.getJSONObject(i);
-                                int id = jsonObject1.getInt("id");
-                                JSONObject jsonObjectImg2 =jsonObject1.getJSONObject("src");
-                                String OriginalUrl = jsonObjectImg2.getString("original");
-                                String MediumUrl = jsonObjectImg2.getString("medium");
-                                wallpaperModel wallpaperModel = new wallpaperModel(id,OriginalUrl,MediumUrl);
+
+                            for(int i=0;i<length;i++){
+
+                                JSONObject object = jsonArray.getJSONObject(i);
+
+                                int id = object.getInt("id");
+
+                                JSONObject objectImages = object.getJSONObject("src");
+
+                                String orignalUrl = objectImages.getString("original");
+                                String mediumUrl = objectImages.getString("medium");
+
+                                wallpaperModel wallpaperModel = new wallpaperModel(id,orignalUrl,mediumUrl);
                                 wallpaperModelList.add(wallpaperModel);
+
+
+
                             }
+
                             wallpaperAdapter.notifyDataSetChanged();
                             pageNumber++;
 
+                        }catch (JSONException e){
 
-                        }catch(JSONException e) {
                         }
 
+
+
+
+
                     }
-                },new Response.ErrorListener(){
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
             }
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("Authorization","enter key");
-                return super.getHeaders();
+                params.put("Authorization","563492ad6f917000010000011069c623c7ad4919b7f934771d8adbe9");
+
+                return params;
             }
         };
 
@@ -132,41 +158,50 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater() .inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.nav_search)
-        {
+
+        if(item.getItemId()==R.id.nav_search){
+
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             final EditText editText = new EditText(this);
             editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            alert.setMessage("Enter Category ex nature");
+
+            alert.setMessage("Enter Category e.g. Nature");
             alert.setTitle("Search Wallpaper");
+
             alert.setView(editText);
+
             alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-                    //bec modify url for search
                     String query = editText.getText().toString().toLowerCase();
-                    //bec fetch another url
-                    url = "https://api.pexels.com/v1/search?query=nature&per_page=1";
-                    //clear
+
+                    url = "https://api.pexels.com/v1/search/?page="+pageNumber+"&per_page=80&query="+query;
                     wallpaperModelList.clear();
                     fetchWallpaper();
-                }
-            });
-            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
 
                 }
             });
+
+            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
             alert.show();
+
+
+
         }
+
         return super.onOptionsItemSelected(item);
     }
 }
