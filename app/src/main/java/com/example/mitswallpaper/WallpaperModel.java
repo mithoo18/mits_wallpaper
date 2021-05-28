@@ -1,15 +1,15 @@
 package com.example.mitswallpaper;
 
-public class wallpaperModel {
+public class WallpaperModel {
     private int id;
     private String originalUrl,mediumUrl;
     //medium thum
     //high large screen
 
-    public wallpaperModel() {
+    public WallpaperModel() {
     }
 
-    public wallpaperModel(int id, String originalUrl, String mediumUrl) {
+    public WallpaperModel(int id, String originalUrl, String mediumUrl) {
         this.id = id;
         this.originalUrl = originalUrl;
         this.mediumUrl = mediumUrl;

@@ -33,9 +33,9 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    wallpaperAdapter wallpaperAdapter;
+    WallpaperAdapter wallpaperAdapter;
     RecyclerView recyclerView;
-    List<wallpaperModel> wallpaperModelList;
+    List<WallpaperModel> wallpaperModelList;
     int pageNumber =1;
 
     //scrolling
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         wallpaperModelList = new ArrayList<>();
-        wallpaperAdapter = new wallpaperAdapter(this,wallpaperModelList);
+        wallpaperAdapter = new WallpaperAdapter(this,wallpaperModelList);
 
         recyclerView.setAdapter(wallpaperAdapter);
 
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                                 String orignalUrl = objectImages.getString("original");
                                 String mediumUrl = objectImages.getString("medium");
 
-                                wallpaperModel wallpaperModel = new wallpaperModel(id,orignalUrl,mediumUrl);
+                                WallpaperModel wallpaperModel = new WallpaperModel(id,orignalUrl,mediumUrl);
                                 wallpaperModelList.add(wallpaperModel);
 
 
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("Authorization","563492ad6f917000010000011069c623c7ad4919b7f934771d8adbe9");
+                params.put("Authorization","563492ad6f91700001000001da8b1d6d87834b9f9709a30b4a372095");
 
                 return params;
             }
